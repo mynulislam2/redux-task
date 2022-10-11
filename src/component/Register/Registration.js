@@ -1,25 +1,19 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { Card, Container, Form, Row, Spinner } from 'react-bootstrap';
-import { useAuthState, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import auth from '../firebase.init';
+import auth from '../../firebase.init';
 import SocialMedia from '../SocialMedia/SocialMedia';
-import './Login.css';
-
+import './Registration.css';
 const Login = () => {
     const [errors, setErrors] = useState('');
 
-    let navigate = useNavigate();
-    let location = useLocation();
-    let from = location.state?.from?.pathname || "/";
-    const [user, loading, error] = useAuthState(auth)
     const [
-        signInWithEmailAndPassword,
-        SignInUser,
-        SignInLoading,
-        SignInError,
-    ] = useSignInWithEmailAndPassword(auth);
+        createUserWithEmailAndPassword,
+        user,
+        loading,
+        error,
+      ] = useCreateUserWithEmailAndPassword(auth);
 
     if (loading) {
         return <div style={{ height: "100vh" }} className='d-flex justify-content-center align-items-center'> <Spinner className='me-3' animation="border" variant="danger" />  </div>
@@ -27,13 +21,13 @@ const Login = () => {
     }
 
 
-    const HandleLogin = (event) => {
+    const HandleRegister = (event) => {
         event.preventDefault()
         const email = event.target.email.value
         const password = event.target.password.value
         const checked = event.target.check.checked
         if (checked) {
-            signInWithEmailAndPassword(email, password)
+            createUserWithEmailAndPassword(email, password)
             setErrors("")
 
         }
@@ -44,17 +38,10 @@ const Login = () => {
     return (
         <Container>
             <Row xs={1} sm={1} md={2} lg={3} >
-
-
-                {
-                    SignInLoading && <div className='d-flex justify-content-center align-items-center w-100 registrationLoading'><Spinner animation="border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner></div>
-                }
-                <Card className={`mx-auto border-0 shadow rounded-3 my-1 ${SignInLoading && "registration"}`}>
+                <Card className={`mx-auto border-0 shadow rounded-3 my-1 registration`}>
                     <Card.Body className="p-4 p-sm-5">
-                        <Card.Title className=" text-center mb-5 fw-light fs-5">Sign In</Card.Title>
-                        <form onSubmit={HandleLogin}>
+                        <Card.Title className=" text-center mb-5 fw-light fs-5">Login</Card.Title>
+                        <form onSubmit={HandleRegister}>
                             <div className="form-floating mb-3">
                                 <Form.Control type="email" placeholder="name@example.com"
                                     name="email"
@@ -69,13 +56,10 @@ const Login = () => {
                             <Form.Group className="mb-3" controlId="formBasicCheckbox">
                                 <Form.Check type="checkbox" label="terms and condition" name='check' />
                             </Form.Group>
-                            {SignInError && <p className='text-danger'>{SignInError?.message.slice(22)}</p>}
-                            {errors && <p className='text-danger'>{errors}</p>}
+                            {error||errors && <small className='text-danger'>{error||errors}</small>}
                             <div className="d-grid mb-2">
-                                <button className="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Sign
-                                    in</button>
+                                <button className="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Login</button>
                             </div>
-                            <small>are you new ?  <Link to='/registration' className='text-decoration-none'>Please Sign Up</Link></small>
 
                             <hr />
                          
