@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Container, Form, Row, Spinner } from 'react-bootstrap';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
 import { StorePerson } from '../../redux/Features/LoggedInPerson/LoggedInPerson';
@@ -9,7 +9,7 @@ import SocialMedia from '../SocialMedia/SocialMedia';
 import './Registration.css';
 const Login = () => {
     const [errors, setErrors] = useState('');
-    const { email, pass } = useSelector((state) => state.person)
+   const navigate= useNavigate()
     const dispatch = useDispatch()
     const [
         createUserWithEmailAndPassword,
@@ -21,7 +21,9 @@ const Login = () => {
         return <div style={{ height: "100vh" }} className='d-flex justify-content-center align-items-center'> <Spinner className='me-3' animation="border" variant="danger" />  </div>
             ;
     }
-
+if(user){
+    navigate('/DashBoard')
+}
 
     const HandleRegister = (event) => {
         event.preventDefault()
