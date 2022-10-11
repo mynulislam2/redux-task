@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { Card, Container, Form, Row, Spinner } from 'react-bootstrap';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
+import { StorePerson } from '../../redux/Features/LoggedInPerson/LoggedInPerson';
 import SocialMedia from '../SocialMedia/SocialMedia';
 import './Registration.css';
 const Login = () => {
     const [errors, setErrors] = useState('');
-
+    const { email, pass } = useSelector((state) => state.person)
+    const dispatch = useDispatch()
     const [
         createUserWithEmailAndPassword,
         user,
         loading,
         error,
-      ] = useCreateUserWithEmailAndPassword(auth);
-
+    ] = useCreateUserWithEmailAndPassword(auth);
     if (loading) {
         return <div style={{ height: "100vh" }} className='d-flex justify-content-center align-items-center'> <Spinner className='me-3' animation="border" variant="danger" />  </div>
             ;
@@ -29,9 +31,10 @@ const Login = () => {
         if (checked) {
             createUserWithEmailAndPassword(email, password)
             setErrors("")
+            dispatch(StorePerson({ email, password }))
 
         }
-       else if (!checked) {
+        else if (!checked) {
             setErrors("Please checkout our terms and condition")
         }
     }
@@ -56,18 +59,20 @@ const Login = () => {
                             <Form.Group className="mb-3" controlId="formBasicCheckbox">
                                 <Form.Check type="checkbox" label="terms and condition" name='check' />
                             </Form.Group>
-                            {error||errors && <small className='text-danger'>{error||errors}</small>}
+                            {error || errors && <small className='text-danger'>{error || errors}</small>}
                             <div className="d-grid mb-2">
                                 <button className="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Login</button>
                             </div>
 
                             <hr />
-                         
+
                             <SocialMedia></SocialMedia>
                         </form>
                     </Card.Body>
                 </Card>
+
             </Row>
+
         </Container>
     );
 };
