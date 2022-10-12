@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ShowDetail } from '../../redux/Features/LoggedInPerson/LoggedInPerson';
 
 const DashBoard = () => {
+    const dispatch=useDispatch()
+useEffect(() => {
+    dispatch(ShowDetail({isShowDetails:()=>true}))
+}, []);
+
 const navigate= useNavigate()
     const GotoDetails=()=>{
         navigate('/DashBoard/Details')

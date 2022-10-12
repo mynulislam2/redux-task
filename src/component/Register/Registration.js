@@ -7,7 +7,7 @@ import auth from '../../firebase.init';
 import { StorePerson } from '../../redux/Features/LoggedInPerson/LoggedInPerson';
 import SocialMedia from '../SocialMedia/SocialMedia';
 import './Registration.css';
-const Login = () => {
+const Registration = () => {
     const [errors, setErrors] = useState('');
    const navigate= useNavigate()
     const dispatch = useDispatch()
@@ -79,4 +79,4 @@ if(user){
     );
 };
 
-export default Login;
+export default Registration;

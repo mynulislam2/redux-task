@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     email: "",
-    pass: ""
+    pass: "",
 }
 
 const LoggedInPerson = createSlice({
@@ -13,12 +13,18 @@ const LoggedInPerson = createSlice({
 
             return {
                 email: action.payload.email,
-                pass: action.payload.password
+                pass: action.payload.password,
+            }
+        },
+        ShowDetail: (state, action) => {
+            return {
+                ...state,
+                isShowDetails: action.payload.isShowDetails
             }
         }
+
     }
 })
 
-console.log(LoggedInPerson)
-export const { StorePerson } = LoggedInPerson.actions
+export const { StorePerson, ShowDetail } = LoggedInPerson.actions
 export default LoggedInPerson.reducer
