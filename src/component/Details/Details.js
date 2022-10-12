@@ -2,10 +2,13 @@ import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { Button, Card, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { ShowDetail } from '../../redux/Features/LoggedInPerson/LoggedInPerson';
+import DashBoard from '../DashBoard/DashBoard';
 
 const Details = () => {
     const { email, pass, isShowDetails } = useSelector((state) => state.person)
+    const navigate= useNavigate()
     const dispatch = useDispatch()
     const Close = () => {
         dispatch(ShowDetail({isShowDetails:()=>false}))
@@ -31,7 +34,7 @@ const Details = () => {
                             </p>
                             <Button onClick={() => Close()}>Close</Button>
                         </Card.Body>
-                    </motion.Card>:"Thank You 🥰"}
+                    </motion.Card>:navigate('/DashBoard')}
 
                 </Row>
 
