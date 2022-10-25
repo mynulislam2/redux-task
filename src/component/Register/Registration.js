@@ -1,6 +1,7 @@
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import React, { useState } from 'react';
 import { Card, Container, Form, Row, Spinner } from 'react-bootstrap';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useAuthState, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
@@ -9,21 +10,11 @@ import SocialMedia from '../SocialMedia/SocialMedia';
 import './Registration.css';
 const Registration = () => {
     const [errors, setErrors] = useState('');
-   const navigate= useNavigate()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [
-        createUserWithEmailAndPassword,
-        user,
-        loading,
-        error,
-    ] = useCreateUserWithEmailAndPassword(auth);
-    if (loading) {
-        return <div style={{ height: "100vh" }} className='d-flex justify-content-center align-items-center'> <Spinner className='me-3' animation="border" variant="danger" />  </div>
-            ;
-    }
-if(user){
-    navigate('/DashBoard')
-}
+    const [loader, setLoader] = useState(false)
+    const[user,loading,error]=useAuthState(auth)
+
 
     const HandleRegister = (event) => {
         event.preventDefault()
@@ -31,14 +22,18 @@ if(user){
         const password = event.target.password.value
         const checked = event.target.check.checked
         if (checked) {
-            createUserWithEmailAndPassword(email, password)
+            signInWithEmailAndPassword(auth, email, password);
             setErrors("")
             dispatch(StorePerson({ email, password }))
-
         }
         else if (!checked) {
             setErrors("Please checkout our terms and condition")
         }
+    }
+
+    if (user) {
+        navigate('/DashBoard')
+        signOut(auth);
     }
     return (
         <Container>
@@ -65,9 +60,7 @@ if(user){
                             <div className="d-grid mb-2">
                                 <button className="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Login</button>
                             </div>
-
                             <hr />
-
                             <SocialMedia></SocialMedia>
                         </form>
                     </Card.Body>

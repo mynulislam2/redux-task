@@ -1,8 +1,10 @@
+import { signOut } from 'firebase/auth';
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { Button, Card, Container, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import auth from '../../firebase.init';
 import { ShowDetail } from '../../redux/Features/LoggedInPerson/LoggedInPerson';
 import DashBoard from '../DashBoard/DashBoard';
 
@@ -12,6 +14,7 @@ const Details = () => {
     const dispatch = useDispatch()
     const Close = () => {
         dispatch(ShowDetail({isShowDetails:()=>false}))
+
     }
     const isShow=isShowDetails()
 
